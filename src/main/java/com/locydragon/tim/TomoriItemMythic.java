@@ -2,6 +2,7 @@ package com.locydragon.tim;
 
 import com.locydragon.tim.commands.CommandBus;
 import com.locydragon.tim.io.FileConstantURLs;
+import com.locydragon.tim.io.listener.IOItemListener;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,6 +22,7 @@ public class TomoriItemMythic extends JavaPlugin {
 		loadConfig();
 		FileConstantURLs.init();
 		Bukkit.getPluginCommand(PLUGIN_CMD).setExecutor(new CommandBus());
+		registerEvents();
 	}
 
 	public void infoTask() {
@@ -39,4 +41,7 @@ public class TomoriItemMythic extends JavaPlugin {
 		config = getConfig();
 	}
 
+	public void registerEvents() {
+		Bukkit.getPluginManager().registerEvents(new IOItemListener(), this);
+	}
 }

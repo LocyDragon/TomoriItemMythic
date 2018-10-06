@@ -2,13 +2,14 @@ package com.locydragon.tim.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  * @author Administrator
  */
 public class SubCommandInfo {
 	public String[] args;
-	public CommandSender sender;
+	public Player sender;
 	public Command command;
 	public String s;
 
@@ -20,7 +21,7 @@ public class SubCommandInfo {
 		return command;
 	}
 
-	public CommandSender getSender() {
+	public Player getSender() {
 		return sender;
 	}
 
