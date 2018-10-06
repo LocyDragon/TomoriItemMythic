@@ -5,21 +5,16 @@ import com.locydragon.tim.commands.SubCommandBasic;
 import com.locydragon.tim.commands.SubCommandInfo;
 import com.locydragon.tim.io.FileConstantURLs;
 import com.locydragon.tim.io.item.IOItemMaker;
+import com.locydragon.tim.model.ModelCar;
+import com.locydragon.tim.model.ModelMainFile;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
-
-import java.io.File;
 
 /**
  * @author Administrator
  */
 public class CommandUseModel implements SubCmdRunner {
-	public static final String MODEL_FILE = "//Model.tim";
-	public static final String pathOne = "ModelLore";
-	public static final String pathTwo = "UsingMessage";
 	/**
 	 * 指令前缀
 	 */
@@ -39,14 +34,13 @@ public class CommandUseModel implements SubCmdRunner {
 					info.getSender().sendMessage("§3[TomoriItemMythic] §e你总不能手握空气使用模板吧!");
 					return;
 				}
-				File modelTarget = new File(FileConstantURLs.MODEL_LOCATION+modelName+MODEL_FILE);
-				if (!modelTarget.exists()) {
+				ModelMainFile model = ModelCar.modelHash.get(modelName);
+				if (model == null) {
 					info.getSender().sendMessage("§3[TomoriItemMythic] §e你输入的模板不存在或模板文件不正确或损坏.");
 					return;
 				}
-				FileConfiguration target = YamlConfiguration.loadConfiguration(modelTarget);
-				IOItemMaker maker = new IOItemMaker(target.getStringList(pathOne),
-						target.getStringList(pathTwo), info.getSender(), info.getSender().getItemInHand());
+				IOItemMaker maker = new IOItemMaker(model.getLoreNeedFormat(),
+						model.getMessageFormat(), info.getSender(), info.getSender().getItemInHand());
 				info.getSender().sendMessage(ChatColor.GREEN+"开始使用模板了...在此过程中请不要变更手上的物品,也要§c正确地§a回答模板的问题!");
 				maker.start();
 			} else {

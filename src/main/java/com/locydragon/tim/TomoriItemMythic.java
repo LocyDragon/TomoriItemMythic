@@ -7,6 +7,7 @@ import com.locydragon.tim.commands.sub.CommandUseModel;
 import com.locydragon.tim.io.FileConstantURLs;
 import com.locydragon.tim.io.FileContains;
 import com.locydragon.tim.io.listener.IOItemListener;
+import com.locydragon.tim.model.ModelMainFile;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -30,6 +31,7 @@ public class TomoriItemMythic extends JavaPlugin {
 		Bukkit.getPluginCommand(PLUGIN_CMD).setExecutor(new CommandBus());
 		registerEvents();
 		loadDefaultModel();
+		loadModels();
 		registerSubCmd();
 	}
 
@@ -74,5 +76,23 @@ public class TomoriItemMythic extends JavaPlugin {
 	public void registerSubCmd() {
 		SubCommandBasic.addListener(new CommandUseModel());
 		SubCommandBasic.addListener(new CommandShowVersion());
+	}
+
+	public void loadModels() {
+		int foundModel = 0;
+		File targetModel = new File(FileConstantURLs.MODEL_LOCATION);
+		Father:
+		for (File inWhich : targetModel.listFiles()) {
+			if (inWhich.isDirectory()) {
+				for (File file : inWhich.listFiles()) {
+					if (file.getName().trim().equalsIgnoreCase("Model.tim")) {
+						new ModelMainFile(file);
+						foundModel++;
+						continue Father;
+					}
+				}
+			}
+		}
+		Bukkit.getLogger().info("找到了 "+foundModel+" 个有效模板!");
 	}
 }
