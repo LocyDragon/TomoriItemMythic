@@ -1,6 +1,9 @@
 package com.locydragon.tim;
 
 import com.locydragon.tim.commands.CommandBus;
+import com.locydragon.tim.commands.SubCommandBasic;
+import com.locydragon.tim.commands.sub.CommandShowVersion;
+import com.locydragon.tim.commands.sub.CommandUseModel;
 import com.locydragon.tim.io.FileConstantURLs;
 import com.locydragon.tim.io.FileContains;
 import com.locydragon.tim.io.listener.IOItemListener;
@@ -8,9 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * @author LocyDragon
@@ -29,6 +30,7 @@ public class TomoriItemMythic extends JavaPlugin {
 		Bukkit.getPluginCommand(PLUGIN_CMD).setExecutor(new CommandBus());
 		registerEvents();
 		loadDefaultModel();
+		registerSubCmd();
 	}
 
 	public void infoTask() {
@@ -57,7 +59,7 @@ public class TomoriItemMythic extends JavaPlugin {
 			boolean isSuccess = defaultFile.getParentFile().mkdirs();
 			try {
 				isSuccess = defaultFile.createNewFile() && isSuccess;
-				FileWriter writer = new FileWriter(defaultFile);
+				Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(defaultFile), "GBK"));
 				writer.write(FileContains.DEFAULT_MODEL_CONTENT);
 				writer.close();
 				if (isSuccess) {
@@ -67,5 +69,10 @@ public class TomoriItemMythic extends JavaPlugin {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public void registerSubCmd() {
+		SubCommandBasic.addListener(new CommandUseModel());
+		SubCommandBasic.addListener(new CommandShowVersion());
 	}
 }

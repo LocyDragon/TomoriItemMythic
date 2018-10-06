@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 public class CommandBus implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-		if (args.length <= 0 && !sender.isOp() && !(sender instanceof Player)) {
+		if (args.length <= 0 || !sender.isOp() || !(sender instanceof Player)) {
 			sender.sendMessage("§3[TomoriItemMythic] §e请输入正确的指令!");
 			return false;
 		}

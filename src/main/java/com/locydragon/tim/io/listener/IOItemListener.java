@@ -38,17 +38,19 @@ public class IOItemListener implements Listener {
 			if (counter == waitSeconds) {
 				playerJob.remove(player);
 				if (langMap.get(player) != null) {
-					//再试一次
+					//再试一发
+					String msg = langMap.get(player);
 					playerJob.remove(player);
 					langMap.remove(player);
-					return langMap.get(player);
+					return msg;
 				}
 				return null;
 			}
 			if (langMap.get(player) != null) {
+				String msg = langMap.get(player);
 				playerJob.remove(player);
 				langMap.remove(player);
-				return langMap.get(player);
+				return msg;
 			}
 		}
 	}

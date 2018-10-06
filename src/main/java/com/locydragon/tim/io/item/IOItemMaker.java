@@ -40,7 +40,8 @@ public class IOItemMaker {
 						if (counter - 1 >= arg2.size()) {
 							who.sendMessage(ChatColor.GREEN+"请输入...");
 						} else {
-							who.sendMessage(arg2.get(counter - 1));
+							who.sendMessage(ChatColor.translateAlternateColorCodes('&',
+									arg2.get(counter - 1)));
 						}
 						String returnInput = IOItemListener.blockedGetReturn(10, who.getName());
 						if (returnInput == null) {
@@ -48,7 +49,8 @@ public class IOItemMaker {
 							return;
 						}
 						String loreNow = arg1.get(i);
-						loreNow = loreNow.replace("<input>", returnInput);
+						loreNow = ChatColor.translateAlternateColorCodes('&',
+								loreNow.replace("<input>", returnInput));
 						lore.add(loreNow);
 					} else {
 						lore.add(arg1.get(i));

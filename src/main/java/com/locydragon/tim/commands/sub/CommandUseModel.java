@@ -29,10 +29,6 @@ public class CommandUseModel implements SubCmdRunner {
 	 */
 	public static final Integer LENGTH_EXPECT = 2;
 
-	static {
-		SubCommandBasic.addListener(new CommandUseModel());
-	}
-
 	@Override
 	public void onSubCommand(SubCommandInfo info) {
 		if (info.args[0].equalsIgnoreCase(CMD_PREFIX)) {
