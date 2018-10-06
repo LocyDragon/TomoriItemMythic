@@ -34,6 +34,11 @@ public class IOItemMaker {
 		pool.execute(new Runnable() {
 			@Override
 			public void run() {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				for (int i = 0;i < arg1.size();i++) {
 					if (arg1.get(i).contains("<input>")) {
 						counter++;
@@ -53,14 +58,14 @@ public class IOItemMaker {
 								loreNow.replace("<input>", returnInput));
 						lore.add(loreNow);
 					} else {
-						lore.add(arg1.get(i));
+						lore.add(ChatColor.translateAlternateColorCodes('&', arg1.get(i)));
 					}
 				}
 				Bukkit.getScheduler().runTask(TomoriItemMythic.PLUGIN_INSTANCE, new Runnable() {
 					@Override
 					public void run() {
 						if (!who.getItemInHand().isSimilar(compare)) {
-							who.sendMessage(ChatColor.RED+"你取消了使用模板...");
+							who.sendMessage(ChatColor.RED+"你取消了使用模板...原因: 你手上拿着的物品和一开始拿的那个不一样!");
 							return;
 						} else {
 							ItemStack inHand = who.getItemInHand();
@@ -68,7 +73,8 @@ public class IOItemMaker {
 							meta.setLore(lore);
 							inHand.setItemMeta(meta);
 							who.setItemInHand(inHand);
-							who.updateInventory();
+							who.updateInventory();who.sendMessage(ChatColor.BLUE+"模板使用结束...");
+
 						}
 					}
 				});

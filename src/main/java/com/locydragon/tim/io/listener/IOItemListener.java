@@ -15,6 +15,7 @@ public class IOItemListener implements Listener {
 	public void onPlayerIOChat(AsyncPlayerChatEvent e) {
 		if (playerJob.contains(e.getPlayer().getName())) {
 			langMap.put(e.getPlayer().getName(), e.getMessage());
+			e.setCancelled(true);
 		}
 	}
 
