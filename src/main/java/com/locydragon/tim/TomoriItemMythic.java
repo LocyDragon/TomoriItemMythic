@@ -2,6 +2,7 @@ package com.locydragon.tim;
 
 import com.locydragon.tim.commands.CommandBus;
 import com.locydragon.tim.commands.SubCommandBasic;
+import com.locydragon.tim.commands.sub.CommandModelLoad;
 import com.locydragon.tim.commands.sub.CommandShowVersion;
 import com.locydragon.tim.commands.sub.CommandUseModel;
 import com.locydragon.tim.io.FileConstantURLs;
@@ -32,6 +33,7 @@ public class TomoriItemMythic extends JavaPlugin {
 		registerEvents();
 		loadDefaultModel();
 		loadModels();
+		loadScripts();
 		registerSubCmd();
 	}
 
@@ -76,6 +78,7 @@ public class TomoriItemMythic extends JavaPlugin {
 	public void registerSubCmd() {
 		SubCommandBasic.addListener(new CommandUseModel());
 		SubCommandBasic.addListener(new CommandShowVersion());
+		SubCommandBasic.addListener(new CommandModelLoad());
 	}
 
 	public void loadModels() {
@@ -94,5 +97,9 @@ public class TomoriItemMythic extends JavaPlugin {
 			}
 		}
 		Bukkit.getLogger().info("找到了 "+foundModel+" 个有效模板!");
+	}
+
+	public void loadScripts() {
+
 	}
 }

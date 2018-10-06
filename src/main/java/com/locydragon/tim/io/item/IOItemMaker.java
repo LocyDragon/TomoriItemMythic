@@ -53,10 +53,19 @@ public class IOItemMaker {
 							who.sendMessage(ChatColor.RED+"你取消了使用模板...");
 							return;
 						}
+						if (returnInput.equals("skip") || returnInput.equals("跳过编辑")) {
+							who.sendMessage(ChatColor.LIGHT_PURPLE+"你跳过了一行编辑...");
+							continue;
+						}
+						if (returnInput.equals("cancel") || returnInput.equals("取消编辑")) {
+							who.sendMessage(ChatColor.RED+"你取消了使用模板...");
+							return;
+						}
 						String loreNow = arg1.get(i);
 						loreNow = ChatColor.translateAlternateColorCodes('&',
 								loreNow.replace("<input>", returnInput));
 						lore.add(loreNow);
+						who.sendMessage(ChatColor.LIGHT_PURPLE+"输入成功...["+returnInput+"]");
 					} else {
 						lore.add(ChatColor.translateAlternateColorCodes('&', arg1.get(i)));
 					}

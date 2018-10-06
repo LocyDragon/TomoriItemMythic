@@ -50,6 +50,8 @@ public class CommandModelLoad implements SubCmdRunner {
 							"§c无法找到该模板,请确认模板所在的位置是否正确.");
 				} else {
 					new ModelMainFile(foundTarget);
+					info.getSender().sendMessage("§3[TomoriItemMythic] " +
+							"§c成功加载 ["+modelName+"] 模板了！");
 				}
 			} else {
 				info.getSender().sendMessage("§3[TomoriItemMythic] " +

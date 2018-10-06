@@ -117,5 +117,15 @@
             <version>1.11.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.12.1.GA</version>
+        </dependency>
+        <dependency>
+            <groupId>com.esotericsoftware.reflectasm</groupId>
+            <artifactId>reflectasm</artifactId>
+            <version>1.09</version>
+        </dependency>
     </dependencies>
 </project>
