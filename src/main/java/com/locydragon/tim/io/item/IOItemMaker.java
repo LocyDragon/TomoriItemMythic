@@ -2,6 +2,7 @@ package com.locydragon.tim.io.item;
 
 import com.locydragon.tim.TomoriItemMythic;
 import com.locydragon.tim.io.listener.IOItemListener;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -61,6 +62,10 @@ public class IOItemMaker {
 							who.sendMessage(ChatColor.RED+"你取消了使用模板...");
 							return;
 						}
+						if (StringUtils.isBlank(ChatColor.stripColor(returnInput).trim())) {
+							who.sendMessage(ChatColor.RED+"你取消了使用模板...原因: 输入为空或只包含颜色代码");
+							return;
+						}
 						String loreNow = arg1.get(i);
 						loreNow = ChatColor.translateAlternateColorCodes('&',
 								loreNow.replace("<input>", returnInput));
@@ -83,7 +88,7 @@ public class IOItemMaker {
 							inHand.setItemMeta(meta);
 							who.setItemInHand(inHand);
 							who.updateInventory();who.sendMessage(ChatColor.BLUE+"模板使用结束...");
-
+							who.updateInventory();who.sendMessage(ChatColor.BLUE+"现在你手上物品的Lore被赋予了新的模板.");
 						}
 					}
 				});
