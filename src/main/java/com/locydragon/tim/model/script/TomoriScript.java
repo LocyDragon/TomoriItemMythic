@@ -54,13 +54,11 @@ public class TomoriScript {
 		}
 		try {
 			this.newInstance = this.target.newInstance();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
+		} catch (InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
 		this.methodAccess = MethodAccess.get(this.target);
-		this.pattern = pattern .replace("<input>", "+\\w+");
+		this.pattern = pattern.replace("<input>", "+\\w+");
 	}
 
 	public boolean run(Player who, Entity target, EntityDamageByEntityEvent e, String x) {
@@ -69,11 +67,11 @@ public class TomoriScript {
 	}
 
 	public boolean match(String lore) {
-		lore = ChatColor.stripColor(lore);
 		return lore.matches(this.pattern);
 	}
 
-	public String valueIn(String lore) {
+	public String valueIn(String loreInput) {
+		String lore = ChatColor.stripColor(loreInput);
 		if (!match(lore)) {
 			return null;
 		}
@@ -83,5 +81,9 @@ public class TomoriScript {
 			lore = lore.replace(split, "");
 		}
 		return lore.trim();
+	}
+
+	public String getPattern() {
+		return this.pattern;
 	}
 }

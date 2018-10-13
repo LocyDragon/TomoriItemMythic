@@ -2,6 +2,7 @@ package com.locydragon.tim.listener;
 
 import com.locydragon.tim.model.script.ScriptCar;
 import com.locydragon.tim.model.script.TomoriScript;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -22,22 +23,21 @@ public class LoreRunnerListener implements Listener {
 						// /SyncModel
 						for (String loreEach : inPlayerHand.getItemMeta().getLore()) {
 							for (Map.Entry<String,TomoriScript> entry : ScriptCar.carSync.entrySet()) {
-								if (entry.getValue().match(loreEach)) {
-									entry.getValue().run(((Player)e.getDamager()), e.getEntity(), e, entry.getValue().valueIn(loreEach));
+								if (entry.getValue().match(ChatColor.stripColor(loreEach))) {
+									entry.getValue().run(((Player)e.getDamager()), e.getEntity(), e
+											, entry.getValue().valueIn(ChatColor.stripColor(loreEach)));
 								}
 							}
 						}
 					}
 					{
 						//AsncModel
-						Thread async = new Thread(new Runnable() {
-							@Override
-							public void run() {
-								for (String loreEach : inPlayerHand.getItemMeta().getLore()) {
-									for (Map.Entry<String,TomoriScript> entry : ScriptCar.carSync.entrySet()) {
-										if (entry.getValue().match(loreEach)) {
-											entry.getValue().run(((Player)e.getDamager()), e.getEntity(), e, entry.getValue().valueIn(loreEach));
-										}
+						Thread async = new Thread(() -> {
+							for (String loreEach : inPlayerHand.getItemMeta().getLore()) {
+								for (Map.Entry<String,TomoriScript> entry : ScriptCar.carAsync.entrySet()) {
+									if (entry.getValue().match(ChatColor.stripColor(loreEach))) {
+										entry.getValue().run(((Player)e.getDamager()), e.getEntity()
+												, e, entry.getValue().valueIn(ChatColor.stripColor(loreEach)));
 									}
 								}
 							}

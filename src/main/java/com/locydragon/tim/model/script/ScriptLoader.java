@@ -17,9 +17,9 @@ public class ScriptLoader {
 		}
 		TomoriScript scriptObject = new TomoriScript(config.getString("pattern"), config.getStringList("script"));
 		if (canAsync) {
-			ScriptCar.carAsync.put(config.getString("pattern"), scriptObject);
+			ScriptCar.carAsync.put(scriptObject.getPattern(), scriptObject);
 		} else {
-			ScriptCar.carSync.put(config.getString("pattern"), scriptObject);
+			ScriptCar.carSync.put(scriptObject.getPattern(), scriptObject);
 		}
 		return scriptObject;
 	}
