@@ -58,7 +58,7 @@ public class TomoriScript {
 			e.printStackTrace();
 		}
 		this.methodAccess = MethodAccess.get(this.target);
-		this.pattern = pattern.replace("<input>", "+\\w+");
+		this.pattern = pattern.replace("<input>", "+\\S+");
 	}
 
 	public boolean run(Player who, Entity target, EntityDamageByEntityEvent e, String x) {
@@ -75,7 +75,7 @@ public class TomoriScript {
 		if (!match(lore)) {
 			return null;
 		}
-		String newPrefix = this.pattern.replace("+\\w+", " ");
+		String newPrefix = this.pattern.replace("+\\S+", " ");
 		for (String split : newPrefix.split(" ")) {
 			split = split.trim();
 			lore = lore.replace(split, "");

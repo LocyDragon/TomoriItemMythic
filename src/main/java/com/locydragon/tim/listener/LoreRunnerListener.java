@@ -11,8 +11,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class LoreRunnerListener implements Listener {
+	ExecutorService asyncPool = Executors.newCachedThreadPool();
 	@EventHandler
 	public void onDamage(EntityDamageByEntityEvent e) {
 		if (e.getDamager() instanceof Player && e.getEntity() instanceof LivingEntity) {
@@ -31,8 +34,9 @@ public class LoreRunnerListener implements Listener {
 						}
 					}
 					{
-						//AsncModel
-						Thread async = new Thread(() -> {
+						//AsncM
+						// odel
+						asyncPool.execute(() -> {
 							for (String loreEach : inPlayerHand.getItemMeta().getLore()) {
 								for (Map.Entry<String,TomoriScript> entry : ScriptCar.carAsync.entrySet()) {
 									if (entry.getValue().match(ChatColor.stripColor(loreEach))) {
@@ -42,7 +46,6 @@ public class LoreRunnerListener implements Listener {
 								}
 							}
 						});
-						async.start();
 					}
 				}
 			}

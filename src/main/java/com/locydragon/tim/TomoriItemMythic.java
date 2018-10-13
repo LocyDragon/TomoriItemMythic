@@ -41,7 +41,7 @@ public class TomoriItemMythic extends JavaPlugin {
 	}
 
 	public void infoTask() {
-		Bukkit.getScheduler().runTaskLater(this, () -> {
+		Bukkit.getScheduler().runTaskLaterAsynchronously(this, () -> {
 			Bukkit.getLogger().info("===========TomoriItemMythic==========");
 			Bukkit.getLogger().info("欢迎使用 TIM 物品编辑器 v" + this.getDescription().getVersion());
 			Bukkit.getLogger().info("您使用的是Locy系列插件: TomoriItemMythic 作者： LocyDragon ; QQ 2424441676");
