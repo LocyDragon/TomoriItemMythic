@@ -28,13 +28,13 @@ public class TomoriScript {
 		longAdder.reset();
 	}
 
-	public TomoriScript(String pattern, List<String> code) {
+	protected TomoriScript(String pattern, List<String> code) {
 		this.pattern = pattern;
 		this.code = code;
 		longAdder.increment();
 		scriptClass = ClassPool.getDefault().makeClass(fatherClass+longAdder.intValue());
 		StringBuilder builderSource = new StringBuilder();
-		builderSource.append("public void run(Player p, Entity target, EntityDamageByEntityEvent e, int x) {");
+		builderSource.append("public void run(Player p, Entity target, EntityDamageByEntityEvent e, String x) {");
 		for (String obj : code) {
 			builderSource.append(obj).append("\n");
 		}
@@ -43,8 +43,9 @@ public class TomoriScript {
 			CtMethod mainMethod = CtMethod.make(builderSource.toString(), scriptClass);
 			scriptClass.addMethod(mainMethod);
 		} catch (CannotCompileException e) {
-			e.printStackTrace();
 			Bukkit.getLogger().info("无法加载该脚本: "+this.pattern);
+			Bukkit.getLogger().info("原因：脚本内代码不正确或编码不对.");
+			return;
 		}
 		try {
 			this.target = this.scriptClass.toClass();
@@ -59,10 +60,10 @@ public class TomoriScript {
 			e.printStackTrace();
 		}
 		this.methodAccess = MethodAccess.get(this.target);
-		this.pattern = pattern.replace("<input>", "+\\w+");
+		this.pattern = pattern .replace("<input>", "+\\w+");
 	}
 
-	public boolean run(Player who, Entity target, EntityDamageByEntityEvent e, int x) {
+	public boolean run(Player who, Entity target, EntityDamageByEntityEvent e, String x) {
 		this.methodAccess.invoke(this.newInstance, "run", who, target, e, x);
 		return true;
 	}
