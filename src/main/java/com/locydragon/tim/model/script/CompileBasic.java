@@ -18,13 +18,15 @@ public class CompileBasic {
 		for (String line : obj) {
 			line = ChatColor.translateAlternateColorCodes('&', line.trim());
 			for (Compiler compiler : car) {
+				System.out.println(line);
 				Result resultEach = compiler.onInput(line);
 				line = resultEach.code;
 				tag = tag && resultEach.canAsync;
 			}
 			if (!(line.contains("{") || line.contains("}")) && !line.endsWith(";")) {
-				line += ";";
+				line = new StringBuilder().append(line).append(";").toString();
 			}
+			System.out.println(line);
 			codeList.add(line);
 		}
 		result.canAsync = tag;

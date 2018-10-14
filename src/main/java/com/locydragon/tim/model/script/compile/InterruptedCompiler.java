@@ -13,6 +13,7 @@ public class InterruptedCompiler implements Compiler{
 			result.code = "return true;";
 		}
 		result.canAsync = true;
+		result.code = line;
 		return result;
 	}
 }
