@@ -14,6 +14,7 @@ import com.locydragon.tim.model.script.CompileBasic;
 import com.locydragon.tim.model.script.ScriptLoader;
 import com.locydragon.tim.model.script.compile.FlowControlCompiler;
 import com.locydragon.tim.model.script.compile.InterruptedCompiler;
+import com.locydragon.tim.model.script.compile.PlayerMethodCompiler;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -132,6 +133,8 @@ public class TomoriItemMythic extends JavaPlugin {
 
 	public void registerCompilers() {
 		CompileBasic.addListener(new InterruptedCompiler());
+		CompileBasic.addListener(new PlayerMethodCompiler());
 		CompileBasic.addListener(new FlowControlCompiler());
+		//这个应该在最后一个
 	}
 }

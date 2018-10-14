@@ -1,5 +1,7 @@
 package com.locydragon.tim.model.script;
 
+import org.bukkit.ChatColor;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,7 @@ public class CompileBasic {
 		boolean tag = true;
 		List<String> codeList = new ArrayList<>();
 		for (String line : obj) {
+			line = ChatColor.translateAlternateColorCodes('&', line.trim());
 			for (Compiler compiler : car) {
 				Result resultEach = compiler.onInput(line);
 				line = resultEach.code;

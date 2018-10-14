@@ -7,6 +7,23 @@ public class FlowControlCompiler implements Compiler {
 	@Override
 	public Result onInput(String line) {
 		Result result = new Result();
-		return null;
+		if (line.startsWith("如果")) {
+			line = line.replace("如果", "if (");
+			line += ") {\n";
+		} else if (line.startsWith("循环")) {
+			line = line.replace("循环", "while (");
+			line += ") {\n";
+		} else if (line.startsWith("结束") && line.equalsIgnoreCase("END")) {
+			line = "}\n";
+		}
+		if (line.contains("且")) {
+			line = line.replace("且", "&&");
+		}
+		if (line.contains("或")) {
+			line = line.replace("或", "||");
+		}
+		result.canAsync = true;
+		result.code = line;
+		return result;
 	}
 }
