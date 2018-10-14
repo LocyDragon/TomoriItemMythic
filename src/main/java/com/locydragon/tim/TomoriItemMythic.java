@@ -121,5 +121,7 @@ public class TomoriItemMythic extends JavaPlugin {
 			}
 		}
 		Bukkit.getLogger().info("找到了 "+foundScript+" 个有效脚本!");
+		Bukkit.getLogger().info("其中 "+ScriptLoader.syncScriptNum+" 是不可异步脚本!");
+		Bukkit.getLogger().info("其中 "+ScriptLoader.asyncScriptNum+" 是可异步脚本!");
 	}
 }

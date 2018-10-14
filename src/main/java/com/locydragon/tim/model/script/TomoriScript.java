@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.atomic.LongAdder;
 
 public class TomoriScript {
@@ -62,7 +63,7 @@ public class TomoriScript {
 	}
 
 	public boolean run(Player who, Entity target, EntityDamageByEntityEvent e, String x) {
-		this.methodAccess.invoke(this.newInstance, "run", who, target, e, x);
+		this.methodAccess.invoke(this.newInstance, "run", who, target, e, getMagic(x));
 		return true;
 	}
 
@@ -72,15 +73,60 @@ public class TomoriScript {
 
 	public String valueIn(String loreInput) {
 		String lore = ChatColor.stripColor(loreInput);
-		if (!match(lore)) {
-			return null;
-		}
 		String newPrefix = this.pattern.replace("+\\S+", " ");
 		for (String split : newPrefix.split(" ")) {
 			split = split.trim();
 			lore = lore.replace(split, "");
 		}
 		return lore.trim();
+	}
+
+	private String getMagic(String obj) {
+		StringBuilder defaultBuilder = new StringBuilder();
+		StringBuilder numberBuilder = new StringBuilder();
+		StringBuilder numberSecondBuilder = new StringBuilder();
+		boolean firstOrSecondLock = false;
+		boolean foundFirst = false;
+		boolean foundSecond = false;
+		boolean shut = false;
+		for (char c : obj.toCharArray()) {
+			defaultBuilder.append(c);
+			if (!shut) {
+				if (Character.isDigit(c) && !firstOrSecondLock && !foundFirst) {
+					numberBuilder.append(c);
+					foundFirst = true;
+				} else if (!Character.isDigit(c) && foundFirst) {
+					if (firstOrSecondLock) {
+						shut = true;
+					}
+					firstOrSecondLock = true;
+				} else if (Character.isDigit(c) && firstOrSecondLock) {
+					numberSecondBuilder.append(c);
+					foundSecond = true;
+				} else if (!Character.isDigit(c) && foundSecond) {
+					shut = true;
+				}
+			}
+		}
+		if (numberBuilder.length() == 0 || numberSecondBuilder.length() == 0) {
+			return defaultBuilder.toString();
+		} else {
+			int firstNum = Integer.valueOf(numberBuilder.toString());
+			int secondNum = Integer.valueOf(numberSecondBuilder.toString());
+			if (firstNum == secondNum) {
+				return defaultBuilder.toString();
+			} else if (firstNum > secondNum) {
+				return String.valueOf(getRandom(secondNum, firstNum));
+			} else {
+				return String.valueOf(getRandom(firstNum, secondNum));
+			}
+		}
+	}
+
+	public static String getRandom(int min, int max){
+		Random random = new Random();
+		int s = random.nextInt(max - min + 1) + min;
+		return String.valueOf(s);
 	}
 
 	public String getPattern() {
