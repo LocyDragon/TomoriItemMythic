@@ -20,42 +20,42 @@ public class PlayerMethodCompiler implements Compiler {
 			String codeSource = "p.chat(";
 			line = line.replaceAll("玩家说", codeSource);
 			line += ");";
-		} if (line.contains("玩家的地址") || line.contains("玩家地址")) {
+		} if (line.contains("玩家的地址") || line.contains("玩家地址") && !line.contains("\"")) {
 			String codeSource = "p.getAddress().toString()";
 			line = line.replaceAll("玩家的地址", codeSource).replaceAll("玩家地址", codeSource);
-		} if (line.contains("可以飞行")) {
+		} if (line.contains("可以飞行") && !line.contains("\"")) {
 			String codeSource = "p.getAllowFlight()";
 			line = line.replaceAll("可以飞行", codeSource);
-		} if (line.contains("玩家显示名字") || line.contains("玩家的显示名字")) {
+		} if (line.contains("玩家显示名字") || line.contains("玩家的显示名字") && !line.contains("\"")) {
 			String codeSource = "p.getDisplayName()";
 			line = line.replaceAll("玩家显示名字", codeSource).replaceAll("玩家的显示名字", codeSource);
-		} if (line.contains("玩家飞行速度") || line.contains("玩家的飞行速度")) {
+		} if (line.contains("玩家飞行速度") || line.contains("玩家的飞行速度") && !line.contains("\"")) {
 			String codeSource = "p.getFlySpeed()";
 			line = line.replaceAll("玩家飞行速度", codeSource).replaceAll("玩家的飞行速度", codeSource);
-		} if (line.contains("玩家饱食度") || line.contains("玩家的饱食度")) {
+		} if (line.contains("玩家饱食度") || line.contains("玩家的饱食度") && !line.contains("\"")) {
 			String codeSource = "p.getFoodLevel()";
 			line = line.replaceAll("玩家饱食度", codeSource).replaceAll("玩家的饱食度", codeSource);
-		} if (line.contains("玩家等级") || line.contains("玩家的等级")) {
+		} if (line.contains("玩家等级") || line.contains("玩家的等级") && !line.contains("\"")) {
 			String codeSource = "p.getLevel()";
 			line = line.replaceAll("玩家等级", codeSource).replaceAll("玩家的等级", codeSource);
-		} if (line.contains("玩家地点") || line.contains("玩家的地点")) {
+		} if (line.contains("玩家地点") || line.contains("玩家的地点") && !line.contains("\"")) {
 			String codeSource = "p.getLocale()";
 			line = line.replaceAll("玩家地点", codeSource).replaceAll("玩家的地点", codeSource);
-		} if (line.contains("玩家经验") || line.contains("玩家的经验")) {
+		} if (line.contains("玩家经验") || line.contains("玩家的经验") && !line.contains("\"")) {
 			String codeSource = "p.getTotalExperience()";
 			line = line.replaceAll("玩家经验", codeSource).replaceAll("玩家的经验", codeSource);
-		} if (line.contains("玩家速度") || line.contains("玩家的速度")) {
+		} if (line.contains("玩家速度") || line.contains("玩家的速度") && !line.contains("\"")) {
 			String codeSource = "p.getWalkSpeed()";
 			line = line.replaceAll("玩家速度", codeSource).replaceAll("玩家的速度", codeSource);
-		} if (line.contains("玩家在飞行")) {
+		} if (line.contains("玩家在飞行") && !line.contains("\"")) {
 			line = line.replaceAll("玩家在飞行", "p.isFlying()");
-		} if (line.contains("玩家在潜行")) {
+		} if (line.contains("玩家在潜行") && !line.contains("\"")) {
 			line = line.replaceAll("玩家在潜行", "p.isSneaking()");
-		} if (line.contains("玩家在冲刺")) {
+		} if (line.contains("玩家在冲刺") && !line.contains("\"")) {
 			line = line.replaceAll("玩家在冲刺", "p.isSprinting()");
-		} if (line.contains("踢出玩家")) {
+		} if (line.contains("踢出玩家") && !line.contains("\"")) {
 			line = line.replaceAll("踢出玩家", "p.kickPlayer(\"\");");
-		} if (line.startsWith("设置等级")) {
+		} if (line.startsWith("设置等级") && !line.contains("\"")) {
 			line = line.replaceAll("设置等级", "p.setLevel(");
 			line += ");";
 		}

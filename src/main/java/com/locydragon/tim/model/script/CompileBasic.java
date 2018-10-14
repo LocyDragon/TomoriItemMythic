@@ -22,6 +22,9 @@ public class CompileBasic {
 				line = resultEach.code;
 				tag = tag && resultEach.canAsync;
 			}
+			if (!(line.contains("{") || line.contains("}")) && !line.endsWith(";")) {
+				line += ";";
+			}
 			codeList.add(line);
 		}
 		result.canAsync = tag;
