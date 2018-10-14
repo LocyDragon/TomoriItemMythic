@@ -4,6 +4,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.util.List;
 
 public class ScriptLoader {
 	public static Integer asyncScriptNum = 0;
@@ -13,11 +14,10 @@ public class ScriptLoader {
 			throw new IllegalArgumentException("Not a legal file!");
 		}
 		FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-		boolean canAsync = true;
-		for (String line : config.getStringList("script")) {
-
-		}
-		TomoriScript scriptObject = new TomoriScript(config.getString("pattern"), config.getStringList("script"));
+		Result scriptResult = CompileBasic.compileAndFindCanAsync( config.getStringList("script"));
+		List<String> codeList = scriptResult.codeList;
+		boolean canAsync = scriptResult.canAsync;
+		TomoriScript scriptObject = new TomoriScript(config.getString("pattern"), codeList);
 		if (canAsync) {
 			ScriptCar.carAsync.put(scriptObject.getPattern(), scriptObject);
 			asyncScriptNum++;

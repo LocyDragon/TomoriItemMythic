@@ -37,11 +37,14 @@ public class LoreRunnerListener implements Listener {
 						//AsncM
 						// odel
 						asyncPool.execute(() -> {
+							Father:
 							for (String loreEach : inPlayerHand.getItemMeta().getLore()) {
 								for (Map.Entry<String,TomoriScript> entry : ScriptCar.carAsync.entrySet()) {
 									if (entry.getValue().match(ChatColor.stripColor(loreEach))) {
-										entry.getValue().run(((Player)e.getDamager()), e.getEntity()
-												, e, entry.getValue().valueIn(ChatColor.stripColor(loreEach)));
+										if (!entry.getValue().run(((Player)e.getDamager()), e.getEntity()
+												, e, entry.getValue().valueIn(ChatColor.stripColor(loreEach)))) {
+											break Father;
+										}
 									}
 								}
 							}

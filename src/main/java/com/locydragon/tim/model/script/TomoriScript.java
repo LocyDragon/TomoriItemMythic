@@ -35,10 +35,11 @@ public class TomoriScript {
 		longAdder.increment();
 		scriptClass = ClassPool.getDefault().makeClass(fatherClass+longAdder.intValue());
 		StringBuilder builderSource = new StringBuilder();
-		builderSource.append("public void run(Player p, Entity target, EntityDamageByEntityEvent e, String x) {");
+		builderSource.append("public boolean run(Player p, Entity target, EntityDamageByEntityEvent e, String x) {");
 		for (String obj : code) {
 			builderSource.append(obj).append("\n");
 		}
+		builderSource.append("return true;\n");
 		builderSource.append("}");
 		try {
 			CtMethod mainMethod = CtMethod.make(builderSource.toString(), scriptClass);
@@ -63,8 +64,8 @@ public class TomoriScript {
 	}
 
 	public boolean run(Player who, Entity target, EntityDamageByEntityEvent e, String x) {
-		this.methodAccess.invoke(this.newInstance, "run", who, target, e, getMagic(x));
-		return true;
+		boolean returnType = (boolean)this.methodAccess.invoke(this.newInstance, "run", who, target, e, getMagic(x));
+		return returnType;
 	}
 
 	public boolean match(String lore) {
