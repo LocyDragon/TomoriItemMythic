@@ -12,6 +12,7 @@ import com.locydragon.tim.listener.LoreRunnerListener;
 import com.locydragon.tim.model.ModelMainFile;
 import com.locydragon.tim.model.script.CompileBasic;
 import com.locydragon.tim.model.script.ScriptLoader;
+import com.locydragon.tim.model.script.compile.FlowControlCompiler;
 import com.locydragon.tim.model.script.compile.InterruptedCompiler;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -41,6 +42,7 @@ public class TomoriItemMythic extends JavaPlugin {
 		loadModels();
 		loadScripts();
 		registerSubCmd();
+		new Metrics(this);
 	}
 
 	public void infoTask() {
@@ -130,5 +132,6 @@ public class TomoriItemMythic extends JavaPlugin {
 
 	public void registerCompilers() {
 		CompileBasic.addListener(new InterruptedCompiler());
+		CompileBasic.addListener(new FlowControlCompiler());
 	}
 }
