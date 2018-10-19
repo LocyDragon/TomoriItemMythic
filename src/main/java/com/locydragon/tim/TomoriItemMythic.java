@@ -14,12 +14,16 @@ import com.locydragon.tim.model.script.CompileBasic;
 import com.locydragon.tim.model.script.ScriptLoader;
 import com.locydragon.tim.model.script.compile.FlowControlCompiler;
 import com.locydragon.tim.model.script.compile.InterruptedCompiler;
+import com.locydragon.tim.model.script.compile.LogicCompiler;
 import com.locydragon.tim.model.script.compile.PlayerMethodCompiler;
+import javassist.*;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * @author LocyDragon
@@ -132,9 +136,27 @@ public class TomoriItemMythic extends JavaPlugin {
 	}
 
 	public void registerCompilers() {
+		makeSupporter();
+		CompileBasic.addListener(new LogicCompiler());
 		CompileBasic.addListener(new InterruptedCompiler());
 		CompileBasic.addListener(new PlayerMethodCompiler());
 		CompileBasic.addListener(new FlowControlCompiler());
 		//这个应该在最后一个
+	}
+
+	public void makeSupporter() {
+		ClassPool pool = ClassPool.getDefault();
+		pool.appendClassPath(new LoaderClassPath(ClassLoader.getSystemClassLoader()));
+		CtClass classCt = pool.makeClass("com.locy.Helper");
+		try {
+			CtMethod mainMethod = CtMethod.make("public static Integer toInt(int obj) { return Integer.valueOf(obj);}", classCt);
+			classCt.addMethod(mainMethod);
+			CtMethod mainMethodSecond = CtMethod.make("public static Integer toInt(Integer obj) { return obj;}", classCt);
+			classCt.addMethod(mainMethodSecond);
+			Class<?> ctClass = classCt.toClass();
+			getLogger().info("Create Support class in loader: "+ctClass.getClassLoader().getClass().getName());
+		} catch (CannotCompileException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -1,27 +1,23 @@
 package com.locydragon.tim.model.script.compile;
 
+import com.locydragon.tim.TomoriItemMythic;
 import com.locydragon.tim.model.script.Compiler;
 import com.locydragon.tim.model.script.Result;
+import org.bukkit.util.StringUtil;
 
 public class PlayerMethodCompiler implements Compiler {
 
 	@Override
 	public Result onInput(String line) {
 		Result result = new Result();
-		if (line.startsWith("print") || line.startsWith("输出")) {
+		if (StringUtil.startsWithIgnoreCase(line, "print") || line.startsWith("输出")) {
 			String codeSource = "p.sendMessage(";
-			line = line.replace("print", codeSource).replace("输出", codeSource);
+			line = line.replaceAll("(?i)print", codeSource).replace("输出", codeSource);
 			line += ");";
-			result.canAsync = true;
-			result.code = line;
-			return result;
 		} if (line.startsWith("玩家说")) {
 			String codeSource = "p.chat(";
 			line = line.replace("玩家说", codeSource);
 			line += ");";
-			result.canAsync = true;
-			result.code = line;
-			return result;
 		} if (line.contains("玩家的地址") || line.contains("玩家地址") && !line.contains("\"")) {
 			String codeSource = "p.getAddress().toString()";
 			line = line.replace("玩家的地址", codeSource).replace("玩家地址", codeSource);
@@ -63,6 +59,39 @@ public class PlayerMethodCompiler implements Compiler {
 			result.canAsync = true;
 			result.code = line;
 			return result;
+		} if (line.contains("玩家名字") || line.contains("玩家的名字")) {
+			String codeSource = "p.getName()";
+			line = line.replace("玩家名字", codeSource).replace("玩家的名字", codeSource);
+		} if (line.contains("有管理员权限")) {
+			String codeSource = "p.isOp()";
+			line = line.replace("有管理员权限", codeSource);
+		} if (line.startsWith("扣血")) {
+			String codeSource = "p.damage(";
+			line = line.replace("扣血", codeSource);
+			line += ");";
+		} if (line.contains("玩家血量") || line.contains("玩家的血量")) {
+			String codeSource = "p.getHealth()";
+			line = line.replace("玩家血量", codeSource).replace("玩家的血量", codeSource);
+		} if (line.contains("玩家最大血量") || line.contains("玩家的最大血量")) {
+			String codeSource = "p.getMaxHealth()";
+			line = line.replace("玩家最大血量", codeSource).replace("玩家的最大血量", codeSource);
+		} if (line.contains("设置血量")) {
+			String codeSource = "p.setHealth((int)";
+			line = line.replace("设置血量", codeSource);
+			line += ");";
+		} if (line.contains("设置最大血量")) {
+			String codeSource = "p.setMaxHealth((int)";
+			line = line.replace("设置最大血量", codeSource);
+			line += ");";
+		} if (line.startsWith("给自己药效")) {
+			//How to use: 给自己药效,药效ID,持续时间,等级
+			try {
+				String obj = line;
+				String[] spliter = obj.split(",");
+				line = "p.addPotionEffect(new PotionEffect(PotionEffectType.getById("+spliter[1]+"), Helper.toInt("+spliter[2]+").intValue() * 20, Helper.toInt("+spliter[3]+").intValue()));";
+			} catch (Exception exc) {
+				TomoriItemMythic.PLUGIN_INSTANCE.getLogger().info("请使用 \"给自己药效,药效ID,持续时间,等级\" 来修改这行代码.");
+			}
 		}
 		result.canAsync = true;
 		result.code = line;

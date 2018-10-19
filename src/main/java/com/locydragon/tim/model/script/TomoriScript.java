@@ -33,6 +33,8 @@ public class TomoriScript {
 		this.pattern = pattern;
 		this.code = code;
 		longAdder.increment();
+		ClassPool defaultPool = ClassPool.getDefault();
+		defaultPool.importPackage("com.locy.Helper");
 		scriptClass = ClassPool.getDefault().makeClass(fatherClass+longAdder.intValue());
 		StringBuilder builderSource = new StringBuilder();
 		builderSource.append("public boolean run(Player p, Entity target, EntityDamageByEntityEvent e, String x) {");
@@ -45,6 +47,7 @@ public class TomoriScript {
 			CtMethod mainMethod = CtMethod.make(builderSource.toString(), scriptClass);
 			scriptClass.addMethod(mainMethod);
 		} catch (CannotCompileException e) {
+			e.printStackTrace();
 			Bukkit.getLogger().info("无法加载该脚本: "+this.pattern);
 			Bukkit.getLogger().info("原因：脚本内代码不正确或编码不对.");
 			return;
