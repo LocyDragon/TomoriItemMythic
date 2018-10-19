@@ -13,7 +13,7 @@ public class FlowControlCompiler implements Compiler {
 		} else if (line.startsWith("循环") && !line.contains("\"")) {
 			line = line.replace("循环", "while (");
 			line += ") {\n";
-		} else if (line.startsWith("结束") && line.equalsIgnoreCase("END") && !line.contains("\"")) {
+		} else if ((line.startsWith("结束") || line.equalsIgnoreCase("END")) && !line.contains("\"")) {
 			line = "}\n";
 		}
 		if (line.contains("且") && !line.contains("\"")) {
