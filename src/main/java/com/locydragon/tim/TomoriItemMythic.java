@@ -7,9 +7,9 @@ import com.locydragon.tim.commands.sub.CommandMonsterDrop;
 import com.locydragon.tim.commands.sub.CommandShowVersion;
 import com.locydragon.tim.commands.sub.CommandUseModel;
 import com.locydragon.tim.io.FileConstantURLs;
-import com.locydragon.tim.io.FileContains;
 import com.locydragon.tim.io.listener.IOItemListener;
 import com.locydragon.tim.listener.LoreRunnerListener;
+import com.locydragon.tim.listener.drop.MonsterDropListener;
 import com.locydragon.tim.model.ModelMainFile;
 import com.locydragon.tim.model.script.CompileBasic;
 import com.locydragon.tim.model.script.ScriptLoader;
@@ -34,6 +34,8 @@ public class TomoriItemMythic extends JavaPlugin {
 	public static TomoriItemMythic PLUGIN_INSTANCE;
 	public static FileConfiguration config;
 	public static final String PLUGIN_CMD = "tim";
+	public static FileConfiguration monsterData;
+	public static File monsterDataFile;
 
 	@Override
 	public void onEnable() {
@@ -46,6 +48,7 @@ public class TomoriItemMythic extends JavaPlugin {
 		FileConstantURLs.init();
 		Bukkit.getPluginCommand(PLUGIN_CMD).setExecutor(new CommandBus());
 		Bukkit.getPluginManager().registerEvents(new LoreRunnerListener(), this);
+		Bukkit.getPluginManager().registerEvents(new MonsterDropListener(), this);
 		registerEvents();
 		loadDefaultModel();
 		loadModels();
@@ -65,6 +68,27 @@ public class TomoriItemMythic extends JavaPlugin {
 	}
 
 	public void loadConfig() {
+		File monsterSave = new File(".//plugins//TomoriItemMythic//Monster.data");
+		boolean exist = true;
+		if (!monsterSave.exists()) {
+			monsterSave.getParentFile().mkdirs();
+			exist = false;
+			try {
+				monsterSave.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		monsterData = YamlConfiguration.loadConfiguration(monsterSave);
+		monsterDataFile = monsterSave;
+		if (!exist) {
+			monsterData.set("Point", 0);
+			try {
+				monsterData.save(monsterDataFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		PLUGIN_INSTANCE = this;
 		saveDefaultConfig();
 		config = getConfig();

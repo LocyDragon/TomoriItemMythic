@@ -1,7 +1,7 @@
 package com.locydragon.tim.util;
 
 public class InScriptUtils {
-	public int getNumber(String x) {
+	public static int getNumber(String x) {
 		StringBuilder builder = new StringBuilder();
 		for (char each : x.toCharArray()) {
 			if (Character.isDigit(each)) {
@@ -14,7 +14,7 @@ public class InScriptUtils {
 		return Integer.valueOf(builder.toString());
 	}
 
-	public boolean odds(int chance) {
+	public static boolean odds(int chance) {
 		if (chance + 1> (int) (Math.random() * 101)) {
 			return true;
 		}
