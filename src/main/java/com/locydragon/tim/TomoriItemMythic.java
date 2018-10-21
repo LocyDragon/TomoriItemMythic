@@ -20,6 +20,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.spigotmc.AsyncCatcher;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class TomoriItemMythic extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		AsyncCatcher.enabled = false;
 		DonotLookAtMe.init();
 		makeSupporter();
 		registerCompilers();
@@ -57,7 +59,7 @@ public class TomoriItemMythic extends JavaPlugin {
 			Bukkit.getLogger().info("===========TomoriItemMythic==========");
 			Bukkit.getLogger().info("欢迎使用 TIM 物品编辑器 v" + this.getDescription().getVersion());
 			Bukkit.getLogger().info("您使用的是Locy系列插件: TomoriItemMythic 作者： LocyDragon ; QQ 2424441676");
-			Bukkit.getLogger().info("小组: PluginCDTribe ; 欢迎加入QQ群: 546818810");
+			Bukkit.getLogger().info("小组: SpicyChicken/PluginCDTribe ; 欢迎加入QQ群: 546818810");
 			Bukkit.getLogger().info("===========TomoriItemMythic==========");
 		}, 20 * 10);
 	}
