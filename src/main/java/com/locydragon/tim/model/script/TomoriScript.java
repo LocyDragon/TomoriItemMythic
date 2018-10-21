@@ -36,6 +36,46 @@ public class TomoriScript {
 		ClassPool defaultPool = ClassPool.getDefault();
 		defaultPool.importPackage("com.locy.Helper");
 		scriptClass = ClassPool.getDefault().makeClass(fatherClass+longAdder.intValue());
+		try {
+			CtMethod methodToNumber = CtMethod.make("public int getNumber(String x) {" +
+					"StringBuilder builder = new StringBuilder();" +
+					"char[] charSet = x.toCharArray();" +
+					"for (int i = 0;i < charSet.length;i++) {" +
+					"char each = charSet[i];" +
+					"if (Character.isDigit(each)) {" +
+					"builder.append(each);" +
+					"}" +
+					"}" +
+					"if (builder.length() == 0) {" +
+					"builder.append(\"0\");" +
+					"}" +
+					"return Integer.valueOf(builder.toString()).intValue();" +
+					"}", scriptClass);
+			scriptClass.addMethod(methodToNumber);
+			CtMethod methodToNumberTwo = CtMethod.make("public int getNumber(int x) { return x; }", scriptClass);
+			scriptClass.addMethod(methodToNumberTwo);
+		} catch (CannotCompileException e) {
+			e.printStackTrace();
+		}
+		try {
+			CtMethod methodToNumber = CtMethod.make("public boolean odds(int chance) {" +
+					"if (chance + 1 > (int) (Math.random() * 101)) {" +
+					"return true;" +
+					"}" +
+					"return false;" +
+					"}", scriptClass);
+			scriptClass.addMethod(methodToNumber);
+		} catch (CannotCompileException e) {
+			e.printStackTrace();
+		}
+		try {
+			CtMethod mainMethod = CtMethod.make("public Integer toInt(int obj) { return Integer.valueOf(obj);}", scriptClass);
+			scriptClass.addMethod(mainMethod);
+			CtMethod mainMethodSecond = CtMethod.make("public Integer toInt(Integer obj) { return obj;}", scriptClass);
+			scriptClass.addMethod(mainMethodSecond);
+		} catch (CannotCompileException e) {
+			e.printStackTrace();
+		}
 		StringBuilder builderSource = new StringBuilder();
 		builderSource.append("public boolean run(Player p, Entity target, EntityDamageByEntityEvent e, String x) {");
 		for (String obj : code) {
@@ -47,9 +87,9 @@ public class TomoriScript {
 			CtMethod mainMethod = CtMethod.make(builderSource.toString(), scriptClass);
 			scriptClass.addMethod(mainMethod);
 		} catch (CannotCompileException e) {
-			e.printStackTrace();
 			Bukkit.getLogger().info("无法加载该脚本: "+this.pattern);
 			Bukkit.getLogger().info("原因：脚本内代码不正确或编码不对.");
+			Bukkit.getLogger().info("报错输出: ["+e.getMessage()+"]["+e.getReason()+"]");
 			return;
 		}
 		try {

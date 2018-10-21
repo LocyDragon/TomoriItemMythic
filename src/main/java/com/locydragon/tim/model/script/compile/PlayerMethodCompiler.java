@@ -76,19 +76,19 @@ public class PlayerMethodCompiler implements Compiler {
 			String codeSource = "p.getMaxHealth()";
 			line = line.replace("玩家最大血量", codeSource).replace("玩家的最大血量", codeSource);
 		} if (line.contains("设置血量")) {
-			String codeSource = "p.setHealth((int)";
+			String codeSource = "p.setHealth(getNumber(";
 			line = line.replace("设置血量", codeSource);
-			line += ");";
+			line += "));";
 		} if (line.contains("设置最大血量")) {
-			String codeSource = "p.setMaxHealth((int)";
+			String codeSource = "p.setMaxHealth(getNumber(";
 			line = line.replace("设置最大血量", codeSource);
-			line += ");";
+			line += "));";
 		} if (line.startsWith("给自己药效")) {
 			//How to use: 给自己药效,药效ID,持续时间,等级
 			try {
 				String obj = line;
 				String[] spliter = obj.split(",");
-				line = "p.addPotionEffect(new PotionEffect(PotionEffectType.getById("+spliter[1]+"), Helper.toInt("+spliter[2]+").intValue() * 20, Helper.toInt("+spliter[3]+").intValue()));";
+				line = "p.addPotionEffect(new PotionEffect(PotionEffectType.getById("+spliter[1]+"), getNumber("+spliter[2]+") * 20, getNumber("+spliter[3]+")));";
 			} catch (Exception exc) {
 				TomoriItemMythic.PLUGIN_INSTANCE.getLogger().info("请使用 \"给自己药效,药效ID,持续时间,等级\" 来修改这行代码.");
 			}

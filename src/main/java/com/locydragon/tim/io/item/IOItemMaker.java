@@ -49,7 +49,7 @@ public class IOItemMaker {
 							who.sendMessage(ChatColor.translateAlternateColorCodes('&',
 									arg2.get(counter - 1)));
 						}
-						String returnInput = IOItemListener.blockedGetReturn(10, who.getName());
+						String returnInput = IOItemListener.blockedGetReturn(30, who.getName());
 						if (returnInput == null) {
 							who.sendMessage(ChatColor.RED+"你取消了使用模板...");
 							return;

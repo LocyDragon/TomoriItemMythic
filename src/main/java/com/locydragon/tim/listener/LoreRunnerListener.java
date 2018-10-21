@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class LoreRunnerListener implements Listener {
-	ExecutorService asyncPool = Executors.newCachedThreadPool();
+	private ExecutorService asyncPool = Executors.newCachedThreadPool();
 	@EventHandler
 	public void onDamage(EntityDamageByEntityEvent e) {
 		if (e.getDamager() instanceof Player && e.getEntity() instanceof LivingEntity) {
@@ -23,19 +23,21 @@ public class LoreRunnerListener implements Listener {
 			if (inPlayerHand != null && inPlayerHand.getType() != Material.AIR) {
 				if (inPlayerHand.hasItemMeta() && inPlayerHand.getItemMeta().hasLore()) {
 					{
-						// /SyncModel
+						// TODO synchorized
+						Father:
 						for (String loreEach : inPlayerHand.getItemMeta().getLore()) {
 							for (Map.Entry<String,TomoriScript> entry : ScriptCar.carSync.entrySet()) {
 								if (entry.getValue().match(ChatColor.stripColor(loreEach))) {
-									entry.getValue().run(((Player)e.getDamager()), e.getEntity(), e
-											, entry.getValue().valueIn(ChatColor.stripColor(loreEach)));
+									if (!entry.getValue().run(((Player)e.getDamager()), e.getEntity()
+											, e, entry.getValue().valueIn(ChatColor.stripColor(loreEach)))) {
+										break Father;
+									}
 								}
 							}
 						}
 					}
 					{
-						//AsncM
-						// odel
+						//TODO async
 						asyncPool.execute(() -> {
 							Father:
 							for (String loreEach : inPlayerHand.getItemMeta().getLore()) {
