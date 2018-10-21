@@ -3,6 +3,7 @@ package com.locydragon.tim.listener.drop;
 import com.locydragon.tim.TomoriItemMythic;
 import com.locydragon.tim.util.InScriptUtils;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -16,11 +17,11 @@ public class MonsterDropListener implements Listener {
 		}
 		String name = e.getEntity().getCustomName();
 		for (String keyData : TomoriItemMythic.monsterData.getKeys(false)) {
-			if (ChatColor.translateAlternateColorCodes('&', TomoriItemMythic.monsterData.getString(keyData+".monster"))
+			if (ChatColor.translateAlternateColorCodes('&', TomoriItemMythic.monsterData.getString(keyData+".monster", ""))
 					.equals(name)) {
-				int chance = TomoriItemMythic.monsterData.getInt(keyData+".chance");
+				int chance = TomoriItemMythic.monsterData.getInt(keyData+".chance", -1);
 				if (InScriptUtils.odds(chance)) {
-					ItemStack dropItem = TomoriItemMythic.monsterData.getItemStack(keyData+".item");
+					ItemStack dropItem = TomoriItemMythic.monsterData.getItemStack(keyData+".item", new ItemStack(Material.AIR));
 					e.getEntity().getLocation()
 							.getWorld().dropItemNaturally(e.getEntity().getLocation(), dropItem);
 				}

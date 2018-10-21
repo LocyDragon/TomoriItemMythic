@@ -20,7 +20,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.spigotmc.AsyncCatcher;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -39,7 +38,6 @@ public class TomoriItemMythic extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		AsyncCatcher.enabled = false;
 		DonotLookAtMe.init();
 		makeSupporter();
 		registerCompilers();
