@@ -3,6 +3,7 @@ package com.locydragon.tim;
 import com.locydragon.tim.commands.CommandBus;
 import com.locydragon.tim.commands.SubCommandBasic;
 import com.locydragon.tim.commands.sub.CommandModelLoad;
+import com.locydragon.tim.commands.sub.CommandMonsterDrop;
 import com.locydragon.tim.commands.sub.CommandShowVersion;
 import com.locydragon.tim.commands.sub.CommandUseModel;
 import com.locydragon.tim.io.FileConstantURLs;
@@ -13,6 +14,7 @@ import com.locydragon.tim.model.ModelMainFile;
 import com.locydragon.tim.model.script.CompileBasic;
 import com.locydragon.tim.model.script.ScriptLoader;
 import com.locydragon.tim.model.script.compile.*;
+import com.locydragon.tim.util.DonotLookAtMe;
 import javassist.*;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -20,8 +22,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +36,7 @@ public class TomoriItemMythic extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		DonotLookAtMe.init();
 		makeSupporter();
 		registerCompilers();
 		infoTask();
@@ -135,6 +136,7 @@ public class TomoriItemMythic extends JavaPlugin {
 		SubCommandBasic.addListener(new CommandUseModel());
 		SubCommandBasic.addListener(new CommandShowVersion());
 		SubCommandBasic.addListener(new CommandModelLoad());
+		SubCommandBasic.addListener(new CommandMonsterDrop());
 	}
 
 	public void loadModels() {
@@ -187,6 +189,7 @@ public class TomoriItemMythic extends JavaPlugin {
 		CompileBasic.addListener(new LogicCompiler());
 		CompileBasic.addListener(new EventCompiler());
 		CompileBasic.addListener(new InterruptedCompiler());
+		CompileBasic.addListener(new TargetMethodCompiler());
 		CompileBasic.addListener(new PlayerMethodCompiler());
 		CompileBasic.addListener(new FlowControlCompiler());
 		//这个应该在最后一个

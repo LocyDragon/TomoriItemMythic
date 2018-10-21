@@ -10,6 +10,7 @@ public class PlayerMethodCompiler implements Compiler {
 	@Override
 	public Result onInput(String line) {
 		Result result = new Result();
+		boolean canAsync = true;
 		if (StringUtil.startsWithIgnoreCase(line, "print") || line.startsWith("输出")) {
 			String codeSource = "p.sendMessage(";
 			line = line.replaceAll("(?i)print", codeSource).replace("输出", codeSource);
@@ -69,6 +70,7 @@ public class PlayerMethodCompiler implements Compiler {
 			String codeSource = "p.damage(";
 			line = line.replace("扣血", codeSource);
 			line += ");";
+			canAsync = false;
 		} if (line.contains("玩家血量") || line.contains("玩家的血量")) {
 			String codeSource = "p.getHealth()";
 			line = line.replace("玩家血量", codeSource).replace("玩家的血量", codeSource);
@@ -76,13 +78,15 @@ public class PlayerMethodCompiler implements Compiler {
 			String codeSource = "p.getMaxHealth()";
 			line = line.replace("玩家最大血量", codeSource).replace("玩家的最大血量", codeSource);
 		} if (line.contains("设置血量")) {
-			String codeSource = "p.setHealth(getNumber(";
+			String codeSource = "p.setHealth((double)";
 			line = line.replace("设置血量", codeSource);
-			line += "));";
+			line += ");";
+			canAsync = false;
 		} if (line.contains("设置最大血量")) {
-			String codeSource = "p.setMaxHealth(getNumber(";
+			String codeSource = "p.setMaxHealth((double)";
 			line = line.replace("设置最大血量", codeSource);
-			line += "));";
+			line += ");";
+			canAsync = false;
 		} if (line.startsWith("给自己药效")) {
 			//How to use: 给自己药效,药效ID,持续时间,等级
 			try {
@@ -92,8 +96,11 @@ public class PlayerMethodCompiler implements Compiler {
 			} catch (Exception exc) {
 				TomoriItemMythic.PLUGIN_INSTANCE.getLogger().info("请使用 \"给自己药效,药效ID,持续时间,等级\" 来修改这行代码.");
 			}
+			result.canAsync = false;
+			result.code = line;
+			return result;
 		}
-		result.canAsync = true;
+		result.canAsync = canAsync;
 		result.code = line;
 		return result;
 	}

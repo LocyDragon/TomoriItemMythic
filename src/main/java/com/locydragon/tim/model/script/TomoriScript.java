@@ -1,16 +1,18 @@
 package com.locydragon.tim.model.script;
 
 import com.esotericsoftware.reflectasm.MethodAccess;
-import javassist.CannotCompileException;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtMethod;
+import com.locydragon.tim.util.DonotLookAtMe;
+import javassist.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.LongAdder;
@@ -34,7 +36,22 @@ public class TomoriScript {
 		this.code = code;
 		longAdder.increment();
 		ClassPool defaultPool = ClassPool.getDefault();
+		/**
+		Path path = Paths.get(Bukkit.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(6));
+		String pathThis = null;
+		try {
+			pathThis = URLDecoder.decode(new String(path.toFile().getAbsolutePath().getBytes("utf-8"), "GBK"), "GBK");
+			try {
+				defaultPool.insertClassPath(pathThis);
+			} catch (NotFoundException e) {
+				e.printStackTrace();
+			}
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		 **/
 		defaultPool.importPackage("com.locy.Helper");
+		DonotLookAtMe.performance.forEach(x -> defaultPool.importPackage(x));
 		scriptClass = ClassPool.getDefault().makeClass(fatherClass+longAdder.intValue());
 		try {
 			CtMethod methodToNumber = CtMethod.make("public int getNumber(String x) {" +
@@ -54,6 +71,12 @@ public class TomoriScript {
 			scriptClass.addMethod(methodToNumber);
 			CtMethod methodToNumberTwo = CtMethod.make("public int getNumber(int x) { return x; }", scriptClass);
 			scriptClass.addMethod(methodToNumberTwo);
+			CtMethod methodToNumberThird = CtMethod.make("public int getNumber(Integer x) { return x.intValue(); }", scriptClass);
+			scriptClass.addMethod(methodToNumberThird);
+			CtMethod methodToNumberForth = CtMethod.make("public int getNumber(Double x) { return x.intValue(); }", scriptClass);
+			scriptClass.addMethod(methodToNumberForth);
+			CtMethod methodToNumberFifth = CtMethod.make("public int getNumber(double x) { return (int)x; }", scriptClass);
+			scriptClass.addMethod(methodToNumberFifth);
 		} catch (CannotCompileException e) {
 			e.printStackTrace();
 		}

@@ -20,6 +20,9 @@ public class EventCompiler implements Compiler {
 			line = line.replace("攻击伤害", codeFormat);
 			canAsync = true;
 		}
+		if (line.equalsIgnoreCase("无伤害")) {
+			line = "e.setCancelled(true);";
+		}
 		result.code = line;
 		result.canAsync = canAsync;
 		return result;
