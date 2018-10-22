@@ -24,4 +24,6 @@ public class ModelMainFile {
 	public String getModelName() {
 		return this.target.getString("ModelName", "UNKNOWN");
 	}
+
+	public String getDisplayName() { return this.target.getString("ItemName", null); }
 }

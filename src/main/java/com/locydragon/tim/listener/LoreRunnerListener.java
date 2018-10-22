@@ -2,6 +2,7 @@ package com.locydragon.tim.listener;
 
 import com.locydragon.tim.model.script.ScriptCar;
 import com.locydragon.tim.model.script.TomoriScript;
+import com.locydragon.tim.model.script.enums.ScriptListenerTypeEnum;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
@@ -27,10 +28,13 @@ public class LoreRunnerListener implements Listener {
 						Father:
 						for (String loreEach : inPlayerHand.getItemMeta().getLore()) {
 							for (Map.Entry<String,TomoriScript> entry : ScriptCar.carSync.entrySet()) {
-								if (entry.getValue().match(ChatColor.stripColor(loreEach))) {
-									if (!entry.getValue().run(((Player)e.getDamager()), e.getEntity()
-											, e, entry.getValue().valueIn(ChatColor.stripColor(loreEach)))) {
-										break Father;
+								if (entry.getValue().type == ScriptListenerTypeEnum.EMPTY || entry.getValue().type == ScriptListenerTypeEnum.IGNORE
+										|| entry.getValue().type == ScriptListenerTypeEnum.WOUND) {
+									if (entry.getValue().match(ChatColor.stripColor(loreEach).trim())) {
+										if (!entry.getValue().run(((Player) e.getDamager()), e.getEntity()
+												, e, entry.getValue().valueIn(ChatColor.stripColor(loreEach)))) {
+											break Father;
+										}
 									}
 								}
 							}
@@ -42,10 +46,13 @@ public class LoreRunnerListener implements Listener {
 							Father:
 							for (String loreEach : inPlayerHand.getItemMeta().getLore()) {
 								for (Map.Entry<String,TomoriScript> entry : ScriptCar.carAsync.entrySet()) {
-									if (entry.getValue().match(ChatColor.stripColor(loreEach))) {
-										if (!entry.getValue().run(((Player)e.getDamager()), e.getEntity()
-												, e, entry.getValue().valueIn(ChatColor.stripColor(loreEach)))) {
-											break Father;
+									if (entry.getValue().type == ScriptListenerTypeEnum.EMPTY || entry.getValue().type == ScriptListenerTypeEnum.IGNORE
+											|| entry.getValue().type == ScriptListenerTypeEnum.WOUND) {
+										if (entry.getValue().match(ChatColor.stripColor(loreEach).trim())) {
+											if (!entry.getValue().run(((Player) e.getDamager()), e.getEntity()
+													, e, entry.getValue().valueIn(ChatColor.stripColor(loreEach)))) {
+												break Father;
+											}
 										}
 									}
 								}

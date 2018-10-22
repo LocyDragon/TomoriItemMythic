@@ -1,6 +1,7 @@
 package com.locydragon.tim.model.script;
 
 import com.esotericsoftware.reflectasm.MethodAccess;
+import com.locydragon.tim.model.script.enums.ScriptListenerTypeEnum;
 import com.locydragon.tim.util.DonotLookAtMe;
 import javassist.*;
 import org.bukkit.Bukkit;
@@ -26,6 +27,7 @@ public class TomoriScript {
 	public Class<?> target;
 	public Object newInstance;
 	public MethodAccess methodAccess;
+	public ScriptListenerTypeEnum type = ScriptListenerTypeEnum.EMPTY;
 
 	static {
 		longAdder.reset();
@@ -37,22 +39,22 @@ public class TomoriScript {
 		longAdder.increment();
 		ClassPool defaultPool = ClassPool.getDefault();
 		/**
-		Path path = Paths.get(Bukkit.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(6));
-		String pathThis = null;
-		try {
-			pathThis = URLDecoder.decode(new String(path.toFile().getAbsolutePath().getBytes("utf-8"), "GBK"), "GBK");
-			try {
-				defaultPool.insertClassPath(pathThis);
-			} catch (NotFoundException e) {
-				e.printStackTrace();
-			}
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		 Path path = Paths.get(Bukkit.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(6));
+		 String pathThis = null;
+		 try {
+		 pathThis = URLDecoder.decode(new String(path.toFile().getAbsolutePath().getBytes("utf-8"), "GBK"), "GBK");
+		 try {
+		 defaultPool.insertClassPath(pathThis);
+		 } catch (NotFoundException e) {
+		 e.printStackTrace();
+		 }
+		 } catch (UnsupportedEncodingException e) {
+		 e.printStackTrace();
+		 }
 		 **/
 		defaultPool.importPackage("com.locy.Helper");
 		DonotLookAtMe.performance.forEach(x -> defaultPool.importPackage(x));
-		scriptClass = ClassPool.getDefault().makeClass(fatherClass+longAdder.intValue());
+		scriptClass = ClassPool.getDefault().makeClass(fatherClass + longAdder.intValue());
 		try {
 			CtMethod methodToNumber = CtMethod.make("public int getNumber(String x) {" +
 					"StringBuilder builder = new StringBuilder();" +
@@ -110,9 +112,9 @@ public class TomoriScript {
 			CtMethod mainMethod = CtMethod.make(builderSource.toString(), scriptClass);
 			scriptClass.addMethod(mainMethod);
 		} catch (CannotCompileException e) {
-			Bukkit.getLogger().info("无法加载该脚本: "+this.pattern);
+			Bukkit.getLogger().info("无法加载该脚本: " + this.pattern);
 			Bukkit.getLogger().info("原因：脚本内代码不正确或编码不对.");
-			Bukkit.getLogger().info("报错输出: ["+e.getMessage()+"]["+e.getReason()+"]");
+			Bukkit.getLogger().info("报错输出: [" + e.getMessage() + "][" + e.getReason() + "]");
 			return;
 		}
 		try {
@@ -127,6 +129,26 @@ public class TomoriScript {
 		}
 		this.methodAccess = MethodAccess.get(this.target);
 		this.pattern = pattern.replace("<input>", "+\\S+");
+	}
+
+	public void setListenerDependOn(String input) {
+		if (input == null || input.trim().length() == 0) {
+			this.type = ScriptListenerTypeEnum.EMPTY;
+			return;
+		}
+		if (input.equalsIgnoreCase("ignore")) {
+			this.type = ScriptListenerTypeEnum.IGNORE;
+			return;
+		}
+		if (input.equalsIgnoreCase("wound")) {
+			this.type = ScriptListenerTypeEnum.WOUND;
+			return;
+		}
+		if (input.equalsIgnoreCase("wounded")) {
+			this.type = ScriptListenerTypeEnum.WOUNDED;
+			return;
+		}
+		this.type = ScriptListenerTypeEnum.EMPTY;
 	}
 
 	public boolean run(Player who, Entity target, EntityDamageByEntityEvent e, String x) {

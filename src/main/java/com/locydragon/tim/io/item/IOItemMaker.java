@@ -22,6 +22,7 @@ public class IOItemMaker {
 	private Player who;
 	private ItemStack compare;
 	private int counter;
+	private String itemName = null;
 	public IOItemMaker(List<String> arg1, List<String> arg2, Player who, ItemStack compare) {
 		this.arg1 = arg1;
 		this.arg2 = arg2;
@@ -31,6 +32,9 @@ public class IOItemMaker {
 		this.counter = 0;
 	}
 
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
 	public void start() {
 		pool.execute(new Runnable() {
 			@Override
@@ -75,6 +79,12 @@ public class IOItemMaker {
 						lore.add(ChatColor.translateAlternateColorCodes('&', arg1.get(i)));
 					}
 				}
+				who.sendMessage(ChatColor.LIGHT_PURPLE+"**************************************");
+				who.sendMessage(ChatColor.BLUE+"最后，请输入你的物品的名字(若跳过，则默认为模板内的名字)，可以使用颜色代码哦~~");
+				String returnInput = IOItemListener.blockedGetReturn(30, who.getName());
+				if (!(returnInput.equals("skip") || returnInput.equals("跳过编辑"))) {
+					itemName = returnInput;
+				}
 				Bukkit.getScheduler().runTask(TomoriItemMythic.PLUGIN_INSTANCE, new Runnable() {
 					@Override
 					public void run() {
@@ -85,6 +95,9 @@ public class IOItemMaker {
 							ItemStack inHand = who.getItemInHand();
 							ItemMeta meta = inHand.getItemMeta();
 							meta.setLore(lore);
+							if (itemName != null) {
+								meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', itemName));
+							}
 							inHand.setItemMeta(meta);
 							who.setItemInHand(inHand);
 							who.updateInventory();who.sendMessage(ChatColor.BLUE+"模板使用结束...");

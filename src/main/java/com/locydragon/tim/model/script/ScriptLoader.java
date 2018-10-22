@@ -18,6 +18,7 @@ public class ScriptLoader {
 		List<String> codeList = scriptResult.codeList;
 		boolean canAsync = scriptResult.canAsync;
 		TomoriScript scriptObject = new TomoriScript(config.getString("pattern"), codeList);
+		scriptObject.setListenerDependOn(config.getString("type", null));
 		if (canAsync) {
 			ScriptCar.carAsync.put(scriptObject.getPattern(), scriptObject);
 			asyncScriptNum++;

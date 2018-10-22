@@ -9,6 +9,7 @@ import com.locydragon.tim.commands.sub.CommandUseModel;
 import com.locydragon.tim.io.FileConstantURLs;
 import com.locydragon.tim.io.listener.IOItemListener;
 import com.locydragon.tim.listener.LoreRunnerListener;
+import com.locydragon.tim.listener.LoreRunnerWoundedListener;
 import com.locydragon.tim.listener.drop.MonsterDropListener;
 import com.locydragon.tim.model.ModelMainFile;
 import com.locydragon.tim.model.script.CompileBasic;
@@ -47,6 +48,7 @@ public class TomoriItemMythic extends JavaPlugin {
 		Bukkit.getPluginCommand(PLUGIN_CMD).setExecutor(new CommandBus());
 		Bukkit.getPluginManager().registerEvents(new LoreRunnerListener(), this);
 		Bukkit.getPluginManager().registerEvents(new MonsterDropListener(), this);
+		Bukkit.getPluginManager().registerEvents(new LoreRunnerWoundedListener(), this);
 		registerEvents();
 		loadDefaultModel();
 		loadModels();
@@ -116,6 +118,7 @@ public class TomoriItemMythic extends JavaPlugin {
 				usage.add("&7[&a模板&7]&a现在,请在聊天栏输入武器的介绍吧!");
 				configDefault.set("UsingMessage", usage);
 				configDefault.set("ModelName", "Default");
+				configDefault.set("ItemName", "&7&l+TomoriItemMythic+");
 				configDefault.save(defaultFile);
 				/**
 				Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(defaultFile), "GBK"));
