@@ -22,6 +22,7 @@ public class EventCompiler implements Compiler {
 		}
 		if (line.equalsIgnoreCase("无伤害")) {
 			line = "e.setCancelled(true);";
+			canAsync = false;
 		}
 		result.code = line;
 		result.canAsync = canAsync;

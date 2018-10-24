@@ -3,7 +3,7 @@ package com.locydragon.tim.model;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
+import java.io.*;
 import java.util.List;
 
 public class ModelMainFile {

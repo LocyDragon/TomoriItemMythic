@@ -58,11 +58,15 @@ public class IOItemMaker {
 							who.sendMessage(ChatColor.RED+"你取消了使用模板...");
 							return;
 						}
-						if (returnInput.equals("skip") || returnInput.equals("跳过编辑")) {
+						if (returnInput.equalsIgnoreCase("skip") || returnInput.equals("跳过编辑")) {
 							who.sendMessage(ChatColor.LIGHT_PURPLE+"你跳过了一行编辑...");
 							continue;
 						}
-						if (returnInput.equals("cancel") || returnInput.equals("取消编辑")) {
+						if (returnInput.equalsIgnoreCase("skipall") || returnInput.equals("跳过所有编辑")) {
+							who.sendMessage(ChatColor.LIGHT_PURPLE+"你跳过了所有编辑...");
+							break;
+						}
+						if (returnInput.equalsIgnoreCase("cancel") || returnInput.equals("取消编辑")) {
 							who.sendMessage(ChatColor.RED+"你取消了使用模板...");
 							return;
 						}

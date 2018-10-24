@@ -7,6 +7,7 @@ import javassist.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
@@ -54,7 +55,8 @@ public class TomoriScript {
 		 **/
 		defaultPool.importPackage("com.locy.Helper");
 		DonotLookAtMe.performance.forEach(x -> defaultPool.importPackage(x));
-		scriptClass = ClassPool.getDefault().makeClass(fatherClass + longAdder.intValue());
+		defaultPool.importPackage("java.util.Random");
+		scriptClass = defaultPool.makeClass(fatherClass + longAdder.intValue());
 		try {
 			CtMethod methodToNumber = CtMethod.make("public int getNumber(String x) {" +
 					"StringBuilder builder = new StringBuilder();" +
@@ -101,8 +103,16 @@ public class TomoriScript {
 		} catch (CannotCompileException e) {
 			e.printStackTrace();
 		}
+		try {
+			CtMethod methodSpawnRandom = CtMethod.make("public int randomInArea(int max, int min) {" +
+					"return (int)(Math.random() * (min + 1) + max);" +
+					"}", scriptClass);
+			scriptClass.addMethod(methodSpawnRandom);
+		} catch (CannotCompileException e) {
+			e.printStackTrace();
+		}
 		StringBuilder builderSource = new StringBuilder();
-		builderSource.append("public boolean run(Player p, Entity target, EntityDamageByEntityEvent e, String x) {");
+		builderSource.append("public boolean run(Player p, LivingEntity target, EntityDamageByEntityEvent e, String x) {");
 		for (String obj : code) {
 			builderSource.append(obj).append("\n");
 		}
@@ -115,6 +125,7 @@ public class TomoriScript {
 			Bukkit.getLogger().info("无法加载该脚本: " + this.pattern);
 			Bukkit.getLogger().info("原因：脚本内代码不正确或编码不对.");
 			Bukkit.getLogger().info("报错输出: [" + e.getMessage() + "][" + e.getReason() + "]");
+			Bukkit.getLogger().info("报错输出: "+builderSource.toString());
 			return;
 		}
 		try {
@@ -151,7 +162,7 @@ public class TomoriScript {
 		this.type = ScriptListenerTypeEnum.EMPTY;
 	}
 
-	public boolean run(Player who, Entity target, EntityDamageByEntityEvent e, String x) {
+	public boolean run(Player who, LivingEntity target, EntityDamageByEntityEvent e, String x) {
 		boolean returnType = (boolean)this.methodAccess.invoke(this.newInstance, "run", who, target, e, getMagic(x));
 		return returnType;
 	}

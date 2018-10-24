@@ -21,7 +21,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-
+import java.nio.charset.Charset;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +63,8 @@ public class TomoriItemMythic extends JavaPlugin {
 			Bukkit.getLogger().info("欢迎使用 TIM 物品编辑器 v" + this.getDescription().getVersion());
 			Bukkit.getLogger().info("您使用的是Locy系列插件: TomoriItemMythic 作者： LocyDragon ; QQ 2424441676");
 			Bukkit.getLogger().info("小组: SpicyChicken/PluginCDTribe ; 欢迎加入QQ群: 546818810");
+			Bukkit.getLogger().info("你服务器使用的编码是: "+ Charset.defaultCharset());
+			Bukkit.getLogger().info("Warning: 注意:装了本插件之后请勿使用Reload指令，否则会大量抛出异常!");
 			Bukkit.getLogger().info("===========TomoriItemMythic==========");
 		}, 20 * 10);
 	}

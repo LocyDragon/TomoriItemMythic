@@ -20,4 +20,8 @@ public class InScriptUtils {
 		}
 		return false;
 	}
+
+	public static int randomInArea(int max, int min) {
+		return (int)(Math.random() * (min + 1) + max);
+	}
 }

@@ -30,14 +30,6 @@ public class TargetMethodCompiler implements Compiler {
 			line = line.replace("给对手发送信息", codeSource);
 			line += ");";
 		}
-		if (line.contains("对手血量") || line.contains("对手的血量")) {
-			String codeSource = "target.getHealth()";
-			line = line.replace("对手血量", codeSource).replace("对手的血量", codeSource);
-		}
-		if (line.contains("对手最大血量") || line.contains("对手的最大血量")) {
-			String codeSource = "target.getMaxHealth()";
-			line = line.replace("对手最大血量", codeSource).replace("对手的最大血量", codeSource);
-		}
 		if (line.contains("设置对手血量")) {
 			String codeSource = "target.setHealth(getNumber(";
 			line = line.replace("设置对手血量", codeSource);
@@ -48,6 +40,20 @@ public class TargetMethodCompiler implements Compiler {
 			String codeSource = "target.setMaxHealth(getNumber(";
 			line = line.replace("设置对手最大血量", codeSource);
 			line += "));";
+			canAsync = false;
+		}
+		if (line.contains("对手血量") || line.contains("对手的血量")) {
+			String codeSource = "target.getHealth()";
+			line = line.replace("对手血量", codeSource).replace("对手的血量", codeSource);
+		}
+		if (line.contains("对手最大血量") || line.contains("对手的最大血量")) {
+			String codeSource = "target.getMaxHealth()";
+			line = line.replace("对手最大血量", codeSource).replace("对手的最大血量", codeSource);
+		}
+		if (line.startsWith("扣对手血")) {
+			String codeSource = "target.damage(";
+			line = line.replace("扣对手血", codeSource);
+			line += ");";
 			canAsync = false;
 		}
 		result.canAsync = canAsync;

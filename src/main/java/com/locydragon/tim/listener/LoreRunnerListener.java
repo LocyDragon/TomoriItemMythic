@@ -31,7 +31,7 @@ public class LoreRunnerListener implements Listener {
 								if (entry.getValue().type == ScriptListenerTypeEnum.EMPTY || entry.getValue().type == ScriptListenerTypeEnum.IGNORE
 										|| entry.getValue().type == ScriptListenerTypeEnum.WOUND) {
 									if (entry.getValue().match(ChatColor.stripColor(loreEach).trim())) {
-										if (!entry.getValue().run(((Player) e.getDamager()), e.getEntity()
+										if (!entry.getValue().run(((Player) e.getDamager()), (LivingEntity)e.getEntity()
 												, e, entry.getValue().valueIn(ChatColor.stripColor(loreEach)))) {
 											break Father;
 										}
@@ -49,7 +49,7 @@ public class LoreRunnerListener implements Listener {
 									if (entry.getValue().type == ScriptListenerTypeEnum.EMPTY || entry.getValue().type == ScriptListenerTypeEnum.IGNORE
 											|| entry.getValue().type == ScriptListenerTypeEnum.WOUND) {
 										if (entry.getValue().match(ChatColor.stripColor(loreEach).trim())) {
-											if (!entry.getValue().run(((Player) e.getDamager()), e.getEntity()
+											if (!entry.getValue().run(((Player) e.getDamager()), (LivingEntity)e.getEntity()
 													, e, entry.getValue().valueIn(ChatColor.stripColor(loreEach)))) {
 												break Father;
 											}

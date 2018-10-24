@@ -31,7 +31,7 @@ public class LoreRunnerWoundedListener implements Listener {
 						for (Map.Entry<String, TomoriScript> entry : ScriptCar.carSync.entrySet()) {
 							if (entry.getValue().type == ScriptListenerTypeEnum.WOUNDED) {
 								if (entry.getValue().match(ChatColor.stripColor(loreEach).trim())) {
-									if (!entry.getValue().run(((Player) e.getEntity()), e.getDamager()
+									if (!entry.getValue().run(((Player) e.getEntity()), (LivingEntity)e.getDamager()
 											, e, entry.getValue().valueIn(ChatColor.stripColor(loreEach)))) {
 										break Father;
 									}
@@ -47,7 +47,7 @@ public class LoreRunnerWoundedListener implements Listener {
 							for (Map.Entry<String, TomoriScript> entry : ScriptCar.carAsync.entrySet()) {
 								if (entry.getValue().type == ScriptListenerTypeEnum.WOUNDED) {
 									if (entry.getValue().match(ChatColor.stripColor(loreEach).trim())) {
-										if (!entry.getValue().run(((Player) e.getEntity()), e.getDamager()
+										if (!entry.getValue().run(((Player) e.getEntity()), (LivingEntity)e.getDamager()
 												, e, entry.getValue().valueIn(ChatColor.stripColor(loreEach)))) {
 											break Father;
 										}

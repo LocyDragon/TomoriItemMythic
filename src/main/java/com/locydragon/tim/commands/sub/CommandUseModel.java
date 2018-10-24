@@ -47,6 +47,7 @@ public class CommandUseModel implements SubCmdRunner {
 				info.getSender().sendMessage(ChatColor.GREEN+"开始使用模板了...在此过程中请不要变更手上的物品,也要§c正确地§a回答模板的问题!");
 				info.getSender().sendMessage(ChatColor.RED+"注意: 输入 skip 或 跳过编辑 可以跳过输入当前一行.");
 				info.getSender().sendMessage(ChatColor.RED+"注意: 输入 cancel 或 取消编辑 可以取消编辑.");
+				info.getSender().sendMessage(ChatColor.RED+"注意: 输入 skipall 或 跳过所有编辑 可以跳过所有编辑.");
 				maker.start();
 			} else {
 				info.getSender().sendMessage("§3[TomoriItemMythic] §e请使用/tim model [模板名称] ——给你手上的物品增加一个模板!");
