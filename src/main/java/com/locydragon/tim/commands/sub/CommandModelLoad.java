@@ -5,6 +5,7 @@ import com.locydragon.tim.commands.SubCommandInfo;
 import com.locydragon.tim.io.FileConstantURLs;
 import com.locydragon.tim.model.ModelCar;
 import com.locydragon.tim.model.ModelMainFile;
+import com.locydragon.tim.model.script.ScriptLoader;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -29,6 +30,10 @@ public class CommandModelLoad implements SubCmdRunner {
 				}
 				File foundTarget = null;
 				File targetModel = new File(FileConstantURLs.MODEL_LOCATION);
+				if (ModelCar.modelHash.contains(modelName)) {
+					info.getSender().sendMessage("§3[TomoriItemMythic] §c错误: 该模板已经被加载了惹~");
+					return;
+				}
 				Father:
 				for (File inWhich : targetModel.listFiles()) {
 					if (inWhich.isDirectory()) {
@@ -38,6 +43,13 @@ public class CommandModelLoad implements SubCmdRunner {
 										= YamlConfiguration.loadConfiguration(file);
 								if (configFormat.getString("ModelName").equals(modelName)) {
 									foundTarget = file;
+									if (new File(inWhich.getPath()+"//Script").exists()) {
+										for (File fileScript : new File(inWhich.getPath()+"//Script").listFiles()) {
+											if (fileScript.getName().endsWith(".tos")) {
+												ScriptLoader.load(fileScript);
+											}
+										}
+									}
 									break Father;
 								}
 								continue Father;
