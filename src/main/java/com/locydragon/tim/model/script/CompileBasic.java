@@ -24,6 +24,9 @@ public class CompileBasic {
 			if (!(line.contains("{") || line.contains("}")) && !line.endsWith(";")) {
 				line = new StringBuilder().append(line).append(";").toString();
 			}
+			if (line.contains("<input>")) {
+				line = line.replace("<input>", "x");
+			}
 			codeList.add(line);
 		}
 		result.canAsync = tag;
