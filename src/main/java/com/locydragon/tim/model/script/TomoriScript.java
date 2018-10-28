@@ -139,6 +139,9 @@ public class TomoriScript {
 			e.printStackTrace();
 		}
 		this.methodAccess = MethodAccess.get(this.target);
+		if (pattern.startsWith("+")) {
+			pattern = new StringBuilder().append("\\").append(pattern).toString();
+		}
 		this.pattern = pattern.replace("<input>", "+\\S+");
 	}
 

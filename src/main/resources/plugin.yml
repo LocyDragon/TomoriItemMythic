@@ -1,6 +1,6 @@
 name: TomoriItemMythic
 main: com.locydragon.tim.TomoriItemMythic
-version: 1.0
+version: 1.0.1
 author: [LocyDragon]
 commands:
   tim:

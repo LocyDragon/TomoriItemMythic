@@ -16,15 +16,23 @@ import com.locydragon.tim.model.script.CompileBasic;
 import com.locydragon.tim.model.script.ScriptLoader;
 import com.locydragon.tim.model.script.compile.*;
 import com.locydragon.tim.util.DonotLookAtMe;
+import com.locydragon.tim.util.InScriptUtils;
 import javassist.*;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+
 import java.nio.charset.Charset;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * @author LocyDragon
@@ -36,6 +44,7 @@ public class TomoriItemMythic extends JavaPlugin {
 	public static final String PLUGIN_CMD = "tim";
 	public static FileConfiguration monsterData;
 	public static File monsterDataFile;
+	public static ConcurrentLinkedQueue<String> healthList = new ConcurrentLinkedQueue<String>();
 
 	@Override
 	public void onEnable() {
@@ -55,6 +64,49 @@ public class TomoriItemMythic extends JavaPlugin {
 		loadScripts();
 		registerSubCmd();
 		new Metrics(this);
+		enableAsyncHealthCheck();
+	}
+
+	public String valueIn(String loreInput, String pattern) {
+		String lore = ChatColor.stripColor(loreInput);
+		String newPrefix = pattern.replace("+\\S+", " ");
+		for (String split : newPrefix.split(" ")) {
+			split = split.trim();
+			lore = lore.replace(split, "");
+		}
+		return lore.trim();
+	}
+
+	public void enableAsyncHealthCheck() {
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				for (Player online : Bukkit.getOnlinePlayers()) {
+					int healthAdd = 20;
+					for (ItemStack playerEquip : online.getEquipment().getArmorContents()) {
+						if (playerEquip != null && playerEquip.hasItemMeta() && playerEquip.getItemMeta().hasLore()) {
+							for (String lore : playerEquip.getItemMeta().getLore()) {
+								for (String pattern : TomoriItemMythic.healthList) {
+									lore = ChatColor.stripColor(lore);
+									if (lore.matches(pattern)) {
+										healthAdd += InScriptUtils.getNumber(valueIn(lore, pattern));
+									}
+								}
+							}
+						}
+					}
+					if (online.getMaxHealth() != healthAdd) {
+						updateHealthMax(healthAdd, online);
+					}
+				}
+			}
+		}.runTaskTimerAsynchronously(this, 0, 30);
+	}
+
+	public void updateHealthMax(int max, Player who) {
+		Bukkit.getScheduler().runTask(this, () -> {
+			who.setMaxHealth(max);
+		});
 	}
 
 	public void infoTask() {
@@ -93,7 +145,15 @@ public class TomoriItemMythic extends JavaPlugin {
 		}
 		PLUGIN_INSTANCE = this;
 		saveDefaultConfig();
+		List<String> defaultSetting = new ArrayList<>();
+		defaultSetting.add("");
 		config = getConfig();
+		for (String obj : config.getStringList("DefaultScript.ExtraHealth")) {
+			if (obj.startsWith("+")) {
+				obj = new StringBuilder().append("\\").append(obj).toString();
+			}
+			healthList.add(obj.replace("<input>", "+\\S+"));
+		}
 	}
 
 	public void registerEvents() {

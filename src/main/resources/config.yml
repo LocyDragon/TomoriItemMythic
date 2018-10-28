@@ -1,2 +1,5 @@
-DefaultScript: #默认自带的不需要二次编写的脚本
+DefaultScript:
   ExtraHealth:
+    - "血量加成: <input>"
+    - "+<input> 最大生命值"
+    - "最大生命值 >>> +<input>"
